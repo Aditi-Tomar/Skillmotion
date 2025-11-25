@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skillmotion.AI - Your AI-Powered Skill Development Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .chat-bubble {
+            animation: fadeInUp 0.3s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .typing-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #9ca3af;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-indicator:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .voice-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+            }
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .voice-wave {
+            animation: voiceWave 1.5s ease-in-out infinite;
+        }
+
+        @keyframes voiceWave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.5); }
+        }
+
+        .listening-animation {
+            animation: listening 2s ease-in-out infinite;
+        }
+
+        @keyframes listening {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .speaking-animation {
+            animation: speaking 1s ease-in-out infinite;
+        }
+
+        @keyframes speaking {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.05); }
+            50% { transform: scale(1.1); }
+            75% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold">Skillmotion.AI</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features" class="hover:text-purple-300 transition-colors">Features</a>
+                    <a href="#interface" class="hover:text-purple-300 transition-colors">Try AI</a>
+                    <a href="#about" class="hover:text-purple-300 transition-colors">About</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="floating absolute top-20 left-10 w-4 h-4 bg-white rounded-full"></div>
+            <div class="floating absolute top-40 right-20 w-6 h-6 bg-purple-300 rounded-full" style="animation-delay: -1s;"></div>
+            <div class="floating absolute bottom-40 left-1/4 w-5 h-5 bg-pink-300 rounded-full" style="animation-delay: -2s;"></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto text-center px-4 z-10">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                Your AI-Powered<br>Skill Development<br>Assistant
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl mx-auto">
+                Discover your potential, bridge skill gaps, and accelerate your career growth with personalized AI guidance and voice-enabled learning.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="startVoiceMode()" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                    </svg>
+                    <span>Voice</span>
+                </button>
+                <button onclick="startTextMode()" class="glass-effect hover:bg-white hover:bg-opacity-20 px-8 py-4 rounded-lg font-semibold text-lg transition-all flex items-center justify-center space-x-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    <span>Text</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Powered by Advanced AI</h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Experience the future of skill development with our comprehensive AI-driven platform
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-effect p-8 rounded-xl hover:bg-opacity-20 transition-all">
+                    <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">AI-Powered Analysis</h3>
+                    <p class="text-gray-300">
+                        Advanced LLM technology analyzes your skills, identifies gaps, and creates personalized development plans.
+                    </p>
+                </div>
+
+                <div class="glass-effect p-8 rounded-xl hover:bg-opacity-20 transition-all">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Voice Interaction</h3>
+                    <p class="text-gray-300">
+                        Natural voice conversations with our AI assistant for hands-free learning and seamless interaction.
+                    </p>
+                </div>
+
+                <div class="glass-effect p-8 rounded-xl hover:bg-opacity-20 transition-all">
+                    <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Progress Tracking</h3>
+                    <p class="text-gray-300">
+                        Comprehensive analytics and progress tracking to monitor your skill development journey.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Interface Section -->
+    <section id="interface" class="py-20 bg-gray-900">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">Experience AI-Powered Learning</h2>
+                <p class="text-xl text-gray-300">
+                    Choose your preferred interaction mode and start your skill development journey
+                </p>
+            </div>
+
+            <!-- Voice Assistant Interface -->
+            <div class="glass-effect rounded-xl overflow-hidden mb-8" id="voiceInterface" style="display: none;">
+                <div class="bg-gradient-to-r from-purple-600 to-pink-600 p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Voice Assistant</h3>
+                            <p class="text-sm text-purple-100" id="voiceStatus">Ready to listen</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="showChatLog()" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all" title="Show Chat Log">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                        </button>
+                        <button onclick="closeInterface()" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-8 text-center">
+                    <div class="mb-8">
+                        <div class="w-32 h-32 mx-auto bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-4" id="voiceAvatar">
+                            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Voice Assistant Active</h3>
+                        <p class="text-gray-300" id="voiceInstructions">Click the microphone button below to start speaking</p>
+                    </div>
+
+                    <div class="flex justify-center space-x-4">
+                        <button onclick="toggleVoiceRecording()" id="micButton" class="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-full flex items-center justify-center transition-all transform hover:scale-105 shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="mt-6 text-sm text-gray-400">
+                        <p>Speak naturally and I'll help you with skill development, career advice, and learning plans</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text Chat Interface -->
+            <div class="glass-effect rounded-xl overflow-hidden" id="textInterface" style="display: none;">
+                <div class="bg-gradient-to-r from-blue-600 to-cyan-600 p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Text Chat</h3>
+                            <p class="text-sm text-blue-100">Online</p>
+                        </div>
+                    </div>
+                    <button onclick="closeInterface()" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="h-96 overflow-y-auto p-4 space-y-4" id="chatMessages">
+                    <div class="flex items-start space-x-3 chat-bubble">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <div class="bg-gray-700 rounded-lg px-4 py-2 max-w-xs">
+                            <p class="text-sm">Hello! I'm your AI skill development assistant. I can help you identify skill gaps, create learning plans, and guide your career growth. What would you like to work on today?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-700 p-4">
+                    <div class="flex space-x-2">
+                        <input type="text" id="messageInput" placeholder="Type your message..." class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 text-white">
+                        <button onclick="sendTextMessage()" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 px-6 py-2 rounded-lg font-semibold transition-all">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Log Modal -->
+            <div id="chatLogModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" style="display: none;">
+                <div class="glass-effect rounded-xl max-w-2xl w-full max-h-96 overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-600 to-pink-600 p-4 flex items-center justify-between">
+                        <h3 class="font-semibold text-white">Conversation History</h3>
+                        <button onclick="closeChatLog()" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="p-4 max-h-80 overflow-y-auto" id="chatLogContent">
+                        <p class="text-gray-400 text-center">No conversation history yet. Start talking to see your chat log here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Built with Cutting-Edge Technology</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Skillmotion.AI leverages the latest advances in artificial intelligence, using only free and open-source tools to deliver enterprise-grade capabilities.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2">Groq LLM</h3>
+                    <p class="text-gray-300 text-sm">Ultra-fast language model inference</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 00-2 2v0a2 2 0 002 2m0 0h14m-14 0a2 2 0 002 2v4a2 2 0 002 2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2">LangGraph</h3>
+                    <p class="text-gray-300 text-sm">Advanced LLM orchestration</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h4a1 1 0 011 1v2M7 4h10l1 16H6L7 4z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2">Cohere Embeddings</h3>
+                    <p class="text-gray-300 text-sm">Semantic search and RAG</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold mb-2">Edge-TTS</h3>
+                    <p class="text-gray-300 text-sm">High-quality voice synthesis</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold">Skillmotion.AI</span>
+                </div>
+                <p class="text-gray-400 mb-8">Empowering careers through AI-driven skill development</p>
+                <p class="text-gray-500 text-sm">© 2024 Skillmotion.AI. Built with free and open-source technologies.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let recognition = null;
+        let synthesis = window.speechSynthesis;
+        let isListening = false;
+        let isSpeaking = false;
+        let currentMode = null; // 'voice' or 'text'
+        let conversationHistory = [];
+
+        // Initialize Web Speech API
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = function() {
+                isListening = true;
+                updateVoiceStatus('Listening...');
+                document.getElementById('voiceAvatar').classList.add('listening-animation');
+                document.getElementById('micButton').classList.add('voice-pulse');
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                console.log('Voice input:', transcript);
+                processVoiceInput(transcript);
+            };
+
+            recognition.onend = function() {
+                isListening = false;
+                updateVoiceStatus('Processing...');
+                document.getElementById('voiceAvatar').classList.remove('listening-animation');
+                document.getElementById('micButton').classList.remove('voice-pulse');
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                isListening = false;
+                updateVoiceStatus('Error occurred. Try again.');
+                document.getElementById('voiceAvatar').classList.remove('listening-animation');
+                document.getElementById('micButton').classList.remove('voice-pulse');
+            };
+        }
+
+        // Mode switching functions
+        function startVoiceMode() {
+            currentMode = 'voice';
+            document.getElementById('voiceInterface').style.display = 'block';
+            document.getElementById('textInterface').style.display = 'none';
+            document.getElementById('voiceInterface').scrollIntoView({ behavior: 'smooth' });
+            updateVoiceStatus('Ready to listen');
+        }
+
+        function startTextMode() {
+            currentMode = 'text';
+            document.getElementById('textInterface').style.display = 'block';
+            document.getElementById('voiceInterface').style.display = 'none';
+            document.getElementById('textInterface').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeInterface() {
+            document.getElementById('voiceInterface').style.display = 'none';
+            document.getElementById('textInterface').style.display = 'none';
+            currentMode = null;
+
+            // Stop any ongoing speech recognition or synthesis
+            if (recognition && isListening) {
+                recognition.stop();
+            }
+            if (synthesis.speaking) {
+                synthesis.cancel();
+            }
+        }
+
+        // Voice interface functions
+        function toggleVoiceRecording() {
+            if (!recognition) {
+                alert('Speech recognition is not supported in your browser. Please use Chrome or Edge.');
+                return;
+            }
+
+            if (isListening) {
+                recognition.stop();
+            } else if (!isSpeaking) {
+                recognition.start();
+            }
+        }
+
+        function updateVoiceStatus(status) {
+            document.getElementById('voiceStatus').textContent = status;
+            document.getElementById('voiceInstructions').textContent = status;
+        }
+
+        function processVoiceInput(transcript) {
+            // Add to conversation history
+            conversationHistory.push({
+                type: 'user',
+                content: transcript,
+                timestamp: new Date().toISOString(),
+                mode: 'voice'
+            });
+
+            updateVoiceStatus('Thinking...');
+
+            // Send to AI backend
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: transcript,
+                    voice_enabled: true,
+                    user_id: 'voice_user'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Add AI response to history
+                conversationHistory.push({
+                    type: 'ai',
+                    content: data.response,
+                    timestamp: new Date().toISOString(),
+                    mode: 'voice'
+                });
+
+                // Speak the response
+                speakResponse(data.response, data.audio_url);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const errorMessage = "I'm having trouble connecting to the AI service. Please check if the backend server is running.";
+                conversationHistory.push({
+                    type: 'ai',
+                    content: errorMessage,
+                    timestamp: new Date().toISOString(),
+                    mode: 'voice'
+                });
+                speakResponse(errorMessage);
+            });
+        }
+
+        function speakResponse(text, audioUrl = null) {
+            updateVoiceStatus('Speaking...');
+            document.getElementById('voiceAvatar').classList.add('speaking-animation');
+            isSpeaking = true;
+
+            if (audioUrl) {
+                // Use server-generated audio
+                const audio = new Audio(audioUrl);
+                audio.onended = function() {
+                    finishSpeaking();
+                };
+                audio.onerror = function() {
+                    // Fallback to browser TTS
+                    useBrowserTTS(text);
+                };
+                audio.play();
+            } else {
+                // Use browser TTS
+                useBrowserTTS(text);
+            }
+        }
+
+        function useBrowserTTS(text) {
+            if (synthesis) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                utterance.volume = 0.8;
+
+                utterance.onend = function() {
+                    finishSpeaking();
+                };
+
+                utterance.onerror = function() {
+                    finishSpeaking();
+                };
+
+                synthesis.speak(utterance);
+            } else {
+                finishSpeaking();
+            }
+        }
+
+        function finishSpeaking() {
+            isSpeaking = false;
+            updateVoiceStatus('Ready to listen');
+            document.getElementById('voiceAvatar').classList.remove('speaking-animation');
+        }
+
+        // Text interface functions
+        function sendTextMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            const chatMessages = document.getElementById('chatMessages');
+
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'flex items-start space-x-3 justify-end chat-bubble';
+            userMessage.innerHTML = `
+                <div class="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg px-4 py-2 max-w-xs">
+                    <p class="text-sm text-white">${message}</p>
+                </div>
+                <div class="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </div>
+            `;
+            chatMessages.appendChild(userMessage);
+
+            // Add to conversation history
+            conversationHistory.push({
+                type: 'user',
+                content: message,
+                timestamp: new Date().toISOString(),
+                mode: 'text'
+            });
+
+            // Add typing indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'flex items-start space-x-3 chat-bubble';
+            typingIndicator.id = 'typingIndicator';
+            typingIndicator.innerHTML = `
+                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <div class="bg-gray-700 rounded-lg px-4 py-2">
+                    <div class="flex space-x-1">
+                        <div class="typing-indicator"></div>
+                        <div class="typing-indicator"></div>
+                        <div class="typing-indicator"></div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingIndicator);
+
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Send message to backend
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    voice_enabled: false,
+                    user_id: 'text_user'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remove typing indicator
+                document.getElementById('typingIndicator').remove();
+
+                // Add AI response
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'flex items-start space-x-3 chat-bubble';
+                aiMessage.innerHTML = `
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="bg-gray-700 rounded-lg px-4 py-2 max-w-xs">
+                        <p class="text-sm">${data.response}</p>
+                    </div>
+                `;
+                chatMessages.appendChild(aiMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Add to conversation history
+                conversationHistory.push({
+                    type: 'ai',
+                    content: data.response,
+                    timestamp: new Date().toISOString(),
+                    mode: 'text'
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Remove typing indicator
+                const indicator = document.getElementById('typingIndicator');
+                if (indicator) indicator.remove();
+
+                // Add error message
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'flex items-start space-x-3 chat-bubble';
+                errorMessage.innerHTML = `
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="bg-gray-700 rounded-lg px-4 py-2 max-w-xs">
+                        <p class="text-sm">I'm currently setting up the backend. Please make sure the FastAPI server is running to enable AI responses!</p>
+                    </div>
+                `;
+                chatMessages.appendChild(errorMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+        }
+
+        // Chat log functions
+        function showChatLog() {
+            const modal = document.getElementById('chatLogModal');
+            const content = document.getElementById('chatLogContent');
+
+            if (conversationHistory.length === 0) {
+                content.innerHTML = '<p class="text-gray-400 text-center">No conversation history yet. Start talking to see your chat log here.</p>';
+            } else {
+                content.innerHTML = '';
+                conversationHistory.forEach(entry => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `mb-4 p-3 rounded-lg ${entry.type === 'user' ? 'bg-purple-600 ml-8' : 'bg-gray-700 mr-8'}`;
+
+                    const time = new Date(entry.timestamp).toLocaleTimeString();
+                    const modeIcon = entry.mode === 'voice' ? '🎤' : '💬';
+
+                    messageDiv.innerHTML = `
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs font-semibold">${entry.type === 'user' ? 'You' : 'AI Assistant'}</span>
+                            <span class="text-xs text-gray-300">${modeIcon} ${time}</span>
+                        </div>
+                        <p class="text-sm">${entry.content}</p>
+                    `;
+
+                    content.appendChild(messageDiv);
+                });
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeChatLog() {
+            document.getElementById('chatLogModal').style.display = 'none';
+        }
+
+        // Event listeners
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendTextMessage();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('chatLogModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeChatLog();
+            }
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (recognition && isListening) {
+                recognition.stop();
+            }
+            if (synthesis.speaking) {
+                synthesis.cancel();
+            }
+        });
+    </script>
+</body>
+</html>

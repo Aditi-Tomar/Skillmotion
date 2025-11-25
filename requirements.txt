@@ -1,0 +1,40 @@
+# Core FastAPI and server dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+python-dotenv==1.0.0
+
+# LangChain and LangGraph for LLM orchestration
+langchain==0.1.0
+langgraph==0.0.20
+langchain-core==0.1.12
+langchain-groq==0.0.1
+
+# LLM and AI service providers (all free tier)
+groq==0.4.1
+cohere==4.37
+
+# Text-to-Speech
+edge-tts==6.1.9
+
+# Async and file handling
+aiofiles==23.2.1
+aiomysql==0.2.0
+
+# Utilities and data processing
+pydantic==2.5.0
+typing-extensions==4.8.0
+httpx==0.25.2
+requests==2.31.0
+
+# Resume processing dependencies
+PyPDF2==3.0.1
+python-docx==0.8.11
+
+# Optional: For enhanced functionality
+numpy==1.24.3
+python-dateutil==2.8.2
+
+# Development and testing (optional)
+pytest==7.4.3
+pytest-asyncio==0.21.1
